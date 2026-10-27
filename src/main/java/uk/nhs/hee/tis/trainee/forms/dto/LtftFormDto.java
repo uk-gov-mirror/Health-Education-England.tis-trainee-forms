@@ -32,6 +32,7 @@ import java.util.UUID;
 import lombok.Builder;
 import uk.nhs.hee.tis.trainee.forms.dto.enumeration.EmailValidityType;
 import uk.nhs.hee.tis.trainee.forms.dto.enumeration.LifecycleState;
+import uk.nhs.hee.tis.trainee.forms.dto.enumeration.ResponsibleRole;
 import uk.nhs.hee.tis.trainee.forms.dto.validation.Create;
 import uk.nhs.hee.tis.trainee.forms.dto.validation.Update;
 import uk.nhs.hee.tis.trainee.forms.dto.views.Admin;
@@ -214,6 +215,8 @@ public record LtftFormDto(
      * @param timestamp        The timestamp of the status change.
      * @param revision         The revision number associated with this status change.
      * @param reviewStage      The review stage associated with this status change, if any.
+     * @param responsibleRole  The role responsible for progressing the form at this status, if
+     *                         any. Derived from the form, so ignored when provided.
      */
     @Builder
     public record StatusInfoDto(
@@ -227,7 +230,9 @@ public record LtftFormDto(
         RedactedPersonDto modifiedBy,
         Instant timestamp,
         Integer revision,
-        ReviewStageStatus reviewStage
+        ReviewStageStatus reviewStage,
+        @JsonView(Admin.Read.class)
+        ResponsibleRole responsibleRole
     ) {
 
     }

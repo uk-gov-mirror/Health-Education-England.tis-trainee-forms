@@ -46,12 +46,14 @@ import uk.nhs.hee.tis.trainee.forms.dto.LtftAdminSummaryDto;
 import uk.nhs.hee.tis.trainee.forms.dto.LtftAdminSummaryDto.LtftAdminPersonalDetailsDto;
 import uk.nhs.hee.tis.trainee.forms.dto.LtftFormDto;
 import uk.nhs.hee.tis.trainee.forms.dto.LtftFormDto.StatusDto.LftfStatusInfoDetailDto;
+import uk.nhs.hee.tis.trainee.forms.dto.LtftFormDto.StatusDto.StatusInfoDto;
 import uk.nhs.hee.tis.trainee.forms.dto.LtftSummaryDto;
 import uk.nhs.hee.tis.trainee.forms.dto.PersonDto;
 import uk.nhs.hee.tis.trainee.forms.dto.PersonalDetailsDto;
 import uk.nhs.hee.tis.trainee.forms.dto.enumeration.EmailValidityType;
 import uk.nhs.hee.tis.trainee.forms.dto.enumeration.LifecycleState;
 import uk.nhs.hee.tis.trainee.forms.model.AbstractAuditedForm.Status.StatusDetail;
+import uk.nhs.hee.tis.trainee.forms.model.AbstractAuditedForm.Status.StatusInfo;
 import uk.nhs.hee.tis.trainee.forms.model.LtftForm;
 import uk.nhs.hee.tis.trainee.forms.model.LtftSubmissionHistory;
 import uk.nhs.hee.tis.trainee.forms.model.Person;
@@ -98,6 +100,7 @@ public abstract class LtftMapper implements FormMapper<LtftForm, LtftFormDto>,
   @Mapping(target = "assignedReviewer.name", source = "status.current.assignedReviewer.name")
   @Mapping(target = "assignedReviewer.email", source = "status.current.assignedReviewer.email")
   @Mapping(target = "assignedReviewer.role", ignore = true)
+  @Mapping(target = "responsibleRole", source = "status.current.responsibleRole")
   public abstract LtftAdminSummaryDto toAdminSummaryDto(LtftForm entity);
 
   /**
@@ -179,6 +182,16 @@ public abstract class LtftMapper implements FormMapper<LtftForm, LtftFormDto>,
    * @return The equivalent Person entity.
    */
   public abstract Person toEntity(PersonDto dto);
+
+  /**
+   * Convert a {@link StatusInfoDto} to a {@link StatusInfo}. The responsible role is derived by
+   * the entity, so is never accepted from a DTO.
+   *
+   * @param dto The DTO to convert.
+   * @return The equivalent status info.
+   */
+  @Mapping(target = "responsibleRole", ignore = true)
+  abstract StatusInfo toStatusInfo(StatusInfoDto dto);
 
   /**
    * Convert a {@link LftfStatusInfoDetailDto} to a {@link StatusDetail}.
